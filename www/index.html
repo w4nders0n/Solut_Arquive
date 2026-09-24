@@ -6,18 +6,18 @@
 <title>Solut_Arquive</title>
 <link rel="icon" type="image/svg+xml" href="assets/solut-arquive-logo.svg">
 <link rel="alternate icon" href="assets/solut-arquive-logo.svg">
-<meta name="theme-color" content="#333333">
+<meta name="theme-color" content="#2D55D9">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     box-sizing: border-box;
-    --paper: #EFEAE0; --paper-2: #F7F4EC; --surface: #FFFDF8;
-    --ink: #20251F; --ink-soft: #5B6157; --ink-faint: #8B9084;
-    --line: #D9D3C2; --line-strong: #C3BCA6;
-    --accent: #0F6B5C; --accent-2: #12876F; --accent-soft: #E3ECE7;
-    --amber: #C9862B; --amber-soft: #F3E6CE;
-    --danger: #AD4530; --danger-soft: #F3E0DA;
+    --paper: #F4F8FC; --paper-2: #EEF4FB; --surface: #FFFFFF;
+    --ink: #142A4D; --ink-soft: #405575; --ink-faint: #7C8EA8;
+    --line: #D7E2EF; --line-strong: #B9C9DE;
+    --accent: #2D55D9; --accent-2: #4166DF; --accent-soft: #E8EEFF;
+    --amber: #F2C85B; --amber-soft: #FFF4CF;
+    --danger: #D95F78; --danger-soft: #FCE8EE;
     --radius-s: 3px; --radius-m: 6px;
     --shadow-page: 0 1px 2px rgba(32,37,31,0.06), 0 8px 24px rgba(32,37,31,0.08);
     --font-display: 'Fraunces', serif; --font-ui: 'IBM Plex Sans', sans-serif; --font-mono: 'IBM Plex Mono', monospace;
@@ -25,20 +25,20 @@
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --paper: #14170F; --paper-2: #191D14; --surface: #1D2117;
-      --ink: #EAE7DA; --ink-soft: #B3B0A0; --ink-faint: #757A6B;
-      --line: #333A28; --line-strong: #454C36;
-      --accent: #35A78C; --accent-2: #43C29E; --accent-soft: #1E2E27;
-      --amber: #D9A24E; --amber-soft: #332A17; --danger: #D8735A; --danger-soft: #33201A;
+      --paper: #0F1E38; --paper-2: #142A4D; --surface: #19365F;
+      --ink: #F4F8FF; --ink-soft: #C9D7EC; --ink-faint: #91A6C4;
+      --line: #2A4770; --line-strong: #3D5E8C;
+      --accent: #7F9CFF; --accent-2: #9AB1FF; --accent-soft: #243D70;
+      --amber: #FFD76A; --amber-soft: #4B4022; --danger: #F38AA0; --danger-soft: #4A2733;
       --shadow-page: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px rgba(0,0,0,0.4);
     }
   }
   :root[data-theme="dark"] {
-    --paper: #14170F; --paper-2: #191D14; --surface: #1D2117;
-    --ink: #EAE7DA; --ink-soft: #B3B0A0; --ink-faint: #757A6B;
-    --line: #333A28; --line-strong: #454C36;
-    --accent: #35A78C; --accent-2: #43C29E; --accent-soft: #1E2E27;
-    --amber: #D9A24E; --amber-soft: #332A17; --danger: #D8735A; --danger-soft: #33201A;
+    --paper: #0F1E38; --paper-2: #142A4D; --surface: #19365F;
+    --ink: #F4F8FF; --ink-soft: #C9D7EC; --ink-faint: #91A6C4;
+    --line: #2A4770; --line-strong: #3D5E8C;
+    --accent: #7F9CFF; --accent-2: #9AB1FF; --accent-soft: #243D70;
+    --amber: #FFD76A; --amber-soft: #4B4022; --danger: #F38AA0; --danger-soft: #4A2733;
     --shadow-page: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px rgba(0,0,0,0.4);
   }
   html, body { height: 100%; }
@@ -145,41 +145,6 @@
   .sheet-tab { padding: 6px 14px; font-size: 12.5px; border-radius: var(--radius-s); color: var(--ink-faint); border: 1px solid transparent; }
   .sheet-tab.active { background: var(--surface); border-color: var(--line); color: var(--accent); font-weight: 500; }
 
-  /* Slides */
-  #mod-slides .slide-strip { width: 190px; flex-shrink: 0; border-right: 1px solid var(--line); background: var(--paper-2); overflow-y: auto; padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; }
-  .thumb { aspect-ratio: 16/10; background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius-s); padding: 10px; display: flex; flex-direction: column; gap: 4px; position: relative; overflow: hidden; }
-  .thumb.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-  .thumb .num { position: absolute; top: -8px; left: -8px; background: var(--paper-2); color: var(--ink-faint); font-size: 10px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line); z-index: 1; }
-  .thumb .tt { font-family: var(--font-display); font-size: 8.5px; font-weight: 700; color: var(--ink); line-height: 1.2; overflow: hidden; }
-  .thumb .tb { font-size: 6px; color: var(--ink-faint); line-height: 1.3; overflow: hidden; }
-  .thumb .bar { width: 16px; height: 2.5px; background: var(--accent); border-radius: 2px; }
-  .thumb .thumb-img { position: absolute; right: 6px; bottom: 6px; width: 22px; height: 16px; object-fit: cover; border-radius: 2px; border: 1px solid var(--line); }
-  .slide-stage { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-  .slide-canvas-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 32px; overflow: auto; }
-  .slide-canvas { width: 100%; max-width: 760px; aspect-ratio: 16/9; background: var(--surface); box-shadow: var(--shadow-page); padding: 52px 60px; display: flex; gap: 24px; border-radius: 2px; }
-  .slide-canvas-text { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 16px; min-width: 0; }
-  .slide-canvas .accent-bar { width: 46px; height: 5px; background: var(--accent); border-radius: 3px; }
-  .slide-title-edit { font-family: var(--font-display); font-size: 34px; font-weight: 600; border: none; outline: none; background: none; color: var(--ink); width: 100%; }
-  .slide-body-edit { font-size: 15px; line-height: 1.6; border: none; outline: none; background: none; resize: none; color: var(--ink-soft); width: 100%; font-family: inherit; min-height: 120px; flex: 1; }
-  .slide-image-wrap { flex: 0 0 38%; display: flex; align-items: center; justify-content: center; position: relative; }
-  .slide-image-wrap img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: var(--radius-s); }
-  .slide-image-remove { position: absolute; top: -8px; right: -8px; }
-  .slide-controls { display: flex; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--line); background: var(--paper-2); flex-wrap: wrap; }
-
-  /* Presentation mode */
-  .present-overlay { position: fixed; inset: 0; z-index: 500; background: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
-  .present-overlay[hidden] { display: none; }
-  .present-slide { width: 100%; max-width: 920px; aspect-ratio: 16/9; background: var(--surface); border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,.4); padding: 6% 8%; display: flex; gap: 30px; }
-  .present-slide-text { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px; min-width: 0; }
-  .present-slide h1 { font-family: var(--font-display); font-size: clamp(22px, 3.6vw, 40px); margin: 0; color: var(--ink); }
-  .present-slide p { font-size: clamp(13px, 1.5vw, 19px); line-height: 1.6; color: var(--ink-soft); white-space: pre-wrap; margin: 0; }
-  .present-slide-image { flex: 0 0 36%; display: flex; align-items: center; justify-content: center; }
-  .present-slide-image img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px; }
-  .present-controls { display: flex; align-items: center; gap: 14px; margin-top: 22px; }
-  .present-controls .icon-btn { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); color: var(--paper); }
-  .present-controls .icon-btn:hover { border-color: var(--accent-2); color: var(--accent-2); }
-  .present-counter { color: var(--paper); font-size: 13px; font-family: var(--font-mono); min-width: 54px; text-align: center; }
-
   /* Calendar */
   #mod-calendar { flex-direction: column; }
   .cal-head { display: flex; align-items: center; gap: 12px; padding: 16px 22px; border-bottom: 1px solid var(--line); }
@@ -192,7 +157,7 @@
   .cal-day:hover { background: var(--paper-2); }
   .cal-day.muted { color: var(--ink-faint); background: var(--paper); }
   .cal-day.today .dnum { background: var(--accent); color: #fff; }
-  .cal-day.has-event::after { content: ""; position: absolute; inset: 3px; z-index: -1; border-radius: 5px; pointer-events: none; opacity: .72; background: repeating-linear-gradient(135deg, hsla(var(--event-hue), 78%, 82%, .38) 0 7px, hsla(var(--event-hue), 78%, 92%, .16) 7px 13px); }
+  .cal-day.has-event::after { content: ""; position: absolute; inset: 3px; z-index: -1; border-radius: 5px; pointer-events: none; opacity: .72; background: repeating-linear-gradient(45deg, hsla(var(--event-hue), 78%, 82%, .42) 0 7px, hsla(var(--event-hue), 78%, 95%, .18) 7px 13px); }
   .cal-day.has-event.muted::after { opacity: .38; }
   .cal-day > * { position: relative; z-index: 1; }
   .dnum { font-size: 12px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
@@ -219,9 +184,6 @@
   .file-row .ficon img { width: 100%; height: 100%; object-fit: cover; }
   .file-row .fname { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .file-row .fmeta { color: var(--ink-faint); font-size: 12px; margin-left: auto; display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
-
-  /* Image editor overlay */
-
 
   /* Mobile sidebar drawer */
   .mobile-menu-btn { display:none; }
@@ -284,8 +246,7 @@
       -webkit-overflow-scrolling:touch;
       flex:1;
     }
-    .mobile-drawer .rail,
-    .mobile-drawer .slide-strip {
+    .mobile-drawer .rail {
       display:flex !important;
       width:100% !important;
       max-width:none;
@@ -298,7 +259,6 @@
     }
     .mobile-drawer .rail .side-btn span.label { display:block; }
     .mobile-drawer .side-btn { min-height:42px; }
-    .mobile-drawer .slide-strip { flex-direction:column; }
 
     /* The original rails stay hidden while the drawer is active on portrait. */
     #mobileDrawer:not(.open) { pointer-events:none; }
@@ -306,16 +266,12 @@
   }
   @media (max-width: 760px) {
     .omnibox { max-width: 150px; }
-    .rail, #mod-slides .slide-strip { width: 74px; }
+    #mod-docs > .rail { display: none; }
     .rail .side-btn span.label { display: none; }
     .doc-page { padding: 34px 22px; }
-    .slide-canvas { padding: 28px; flex-direction: column; }
-    .slide-image-wrap { flex: 0 0 auto; max-height: 30%; }
-    .slide-title-edit { font-size: 22px; }
     .cal-grid { grid-auto-rows: minmax(64px, 1fr); }
     .cal-evt { display: none; }
     .tb-select { max-width: 64px; }
-    .present-slide { flex-direction: column; }
   }
 </style>
 </head>
@@ -353,7 +309,6 @@
   <nav class="tabs" id="tabs">
     <button class="tab active" data-mod="docs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Documentos</button>
     <button class="tab" data-mod="sheets"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg> Planilhas</button>
-    <button class="tab" data-mod="slides"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="14" rx="1"/><path d="M8 21h8"/></svg> Apresentações</button>
     <button class="tab" data-mod="calendar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Agenda</button>
     <button class="tab" data-mod="files"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Arquivos</button>
   </nav>
@@ -432,7 +387,7 @@
         <span class="cell-badge" id="cellBadge">A1</span>
         <input class="formula-input" id="formulaInput" placeholder="Digite um valor ou fórmula, ex: =SOMA(A1:A4)">
         <button class="icon-btn sm" id="sheetBoldBtn" title="Negrito na célula" aria-label="Negrito na célula"><b style="font-size:11px">B</b></button>
-        <input type="color" id="sheetTextColor" class="color-swatch" title="Cor do texto" value="#20251f">
+        <input type="color" id="sheetTextColor" class="color-swatch" title="Cor do texto" value="#142A4D">
         <input type="color" id="sheetFillColor" class="color-swatch" title="Cor de fundo da célula" value="#ffffff">
         <button class="icon-btn sm" id="exportSheetBtn" title="Salvar como .xlsx" aria-label="Salvar planilha como Excel">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></svg>
@@ -440,46 +395,6 @@
       </div>
       <div class="sheet-scroll"><table class="grid" id="sheetTable"></table></div>
       <div class="sheet-tabs" id="sheetTabs"></div>
-    </section>
-
-    <!-- SLIDES -->
-    <section class="module" id="mod-slides">
-      <div class="slide-strip" id="slideStrip"></div>
-      <div class="slide-stage">
-        <div class="slide-canvas-wrap">
-          <div class="slide-canvas">
-            <div class="slide-canvas-text">
-              <div class="accent-bar"></div>
-              <input class="slide-title-edit" id="slideTitleEdit" placeholder="Título do slide">
-              <textarea class="slide-body-edit" id="slideBodyEdit" placeholder="Conteúdo do slide…"></textarea>
-            </div>
-            <div class="slide-image-wrap" id="slideImageWrap" hidden>
-              <img id="slideImageEl" src="" alt="">
-              <button class="icon-btn sm danger slide-image-remove" id="slideImageRemoveBtn" title="Remover imagem" aria-label="Remover imagem do slide">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="slide-controls">
-          <button class="icon-btn" id="addSlideBtn" title="Novo slide" aria-label="Novo slide">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
-          <button class="icon-btn danger" id="delSlideBtn" title="Remover slide" aria-label="Remover slide">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
-          </button>
-          <label class="icon-btn" id="importImageBtn" title="Importar imagem" aria-label="Importar imagem para o slide">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
-            <input type="file" id="slideImageInput" accept="image/*" style="display:none">
-          </label>
-          <button class="icon-btn" id="presentBtn" title="Apresentar" aria-label="Apresentar">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-14 9V3z"/></svg>
-          </button>
-          <button class="icon-btn" id="exportSlidesBtn" style="margin-left:auto" title="Salvar apresentação como .pptx" aria-label="Salvar apresentação">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></svg>
-          </button>
-        </div>
-      </div>
     </section>
 
     <!-- CALENDAR -->
@@ -514,28 +429,6 @@
 
   </main>
 
-  <div class="present-overlay" id="presentOverlay" hidden>
-    <div class="present-slide">
-      <div class="present-slide-text">
-        <div class="accent-bar" style="width:46px;height:5px;background:var(--accent);border-radius:3px"></div>
-        <h1 id="presentTitle"></h1>
-        <p id="presentBody"></p>
-      </div>
-      <div class="present-slide-image" id="presentImageWrap" hidden><img id="presentImageEl" src="" alt=""></div>
-    </div>
-    <div class="present-controls">
-      <button class="icon-btn sm" id="presentPrev" title="Anterior" aria-label="Slide anterior">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <span class="present-counter" id="presentCounter"></span>
-      <button class="icon-btn sm" id="presentNext" title="Próximo" aria-label="Próximo slide">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-      <button class="icon-btn sm danger" id="presentExit" title="Sair da apresentação" aria-label="Sair da apresentação">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -593,7 +486,6 @@
       const payload = {
         docs: LS.get('sa:docs', null),
         sheets: LS.get('sa:sheets', null),
-        slides: LS.get('sa:slides', null),
         calendarEvents: LS.get('sa:events', null),
         files: LS.get('sa:files', null),
         updatedAt: Date.now()
@@ -618,7 +510,6 @@
           const d = dataSnap.data();
           if (d.docs) LS.set('sa:docs', d.docs);
           if (d.sheets) LS.set('sa:sheets', d.sheets);
-          if (d.slides) LS.set('sa:slides', d.slides);
           if (d.calendarEvents) LS.set('sa:events', d.calendarEvents);
           if (d.files) LS.set('sa:files', d.files);
         }
@@ -882,7 +773,7 @@
   function getMobileSidebarTarget() {
     const active = $('.module.active');
     if (!active) return null;
-    return active.querySelector('.rail, .slide-strip');
+    return active.querySelector('.rail');
   }
 
   function openMobileDrawer() {
@@ -891,7 +782,7 @@
     if (!target) return;
     if (mobileDrawerTarget && mobileDrawerTarget !== target) mobileDrawerTarget.__mobileDrawerPlaceholder?.remove();
     mobileDrawerTarget = target;
-    const title = target.classList.contains('slide-strip') ? 'SEUS SLIDES' : (target.querySelector('.rail-title')?.textContent || 'MENU');
+    const title = target.querySelector('.rail-title')?.textContent || 'MENU';
     mobileDrawerTitle.textContent = title;
     const placeholder = document.createElement('div');
     placeholder.style.display = 'none';
@@ -1160,7 +1051,7 @@
       $('#formulaInput').value = raw === undefined ? '' : String(raw);
       const st = currentStyles()[id] || {};
       $('#sheetBoldBtn').classList.toggle('on', !!st.bold);
-      $('#sheetTextColor').value = st.color || '#20251f';
+      $('#sheetTextColor').value = st.color || '#142A4D';
       $('#sheetFillColor').value = st.bg || '#ffffff';
     }
 
@@ -1224,125 +1115,6 @@
   }
 
   /* ============================================================
-     Apresentações
-  ============================================================ */
-  function initSlides() {
-    let slides = LS.get('sa:slides', null);
-    if (!slides) slides = [
-      { id: uid(), title: 'Título da apresentação', body: 'Um subtítulo ou descrição breve do que será apresentado.', image: null },
-      { id: uid(), title: 'Próximos passos', body: 'Liste aqui os pontos principais deste slide.', image: null }
-    ];
-    let active = slides[0].id;
-
-    function save() { LS.set('sa:slides', slides); }
-    function activeSlide() { return slides.find(s => s.id === active); }
-
-    function renderStrip() {
-      const strip = $('#slideStrip');
-      strip.innerHTML = '';
-      slides.forEach((s, i) => {
-        const thumb = document.createElement('div');
-        thumb.className = 'thumb' + (s.id === active ? ' active' : '');
-        thumb.innerHTML = '<div class="num">' + (i + 1) + '</div><div class="bar"></div>'
-          + '<div class="tt">' + escapeHtml(s.title || 'Sem título') + '</div>'
-          + '<div class="tb">' + escapeHtml((s.body || '').slice(0, 60)) + '</div>'
-          + (s.image ? '<img class="thumb-img" src="' + s.image + '" alt="">' : '');
-        thumb.addEventListener('click', () => { active = s.id; renderStrip(); renderCanvas(); });
-        strip.appendChild(thumb);
-      });
-    }
-
-    function renderCanvas() {
-      const s = activeSlide();
-      $('#slideTitleEdit').value = s.title;
-      $('#slideBodyEdit').value = s.body;
-      const wrap = $('#slideImageWrap');
-      if (s.image) { $('#slideImageEl').src = s.image; wrap.hidden = false; } else { wrap.hidden = true; }
-    }
-
-    $('#slideTitleEdit').addEventListener('input', e => { activeSlide().title = e.target.value; save(); renderStrip(); });
-    $('#slideBodyEdit').addEventListener('input', e => { activeSlide().body = e.target.value; save(); renderStrip(); });
-
-    $('#addSlideBtn').addEventListener('click', () => {
-      const s = { id: uid(), title: '', body: '', image: null };
-      slides.push(s); active = s.id; save(); renderStrip(); renderCanvas();
-      incrementUsage();
-    });
-    $('#delSlideBtn').addEventListener('click', () => {
-      if (slides.length === 1) return;
-      slides = slides.filter(s => s.id !== active);
-      active = slides[0].id; save(); renderStrip(); renderCanvas();
-    });
-
-    $('#slideImageInput').addEventListener('change', async e => {
-      const file = e.target.files[0];
-      e.target.value = '';
-      if (!file) return;
-      try {
-        const dataUrl = await readImageDownscaled(file, 1000, 0.82);
-        activeSlide().image = dataUrl; save(); renderStrip(); renderCanvas();
-      } catch (err) { alert('Não foi possível importar essa imagem.'); }
-    });
-    $('#slideImageRemoveBtn').addEventListener('click', () => {
-      activeSlide().image = null; save(); renderStrip(); renderCanvas();
-    });
-
-    let presentIdx = 0;
-    function renderPresent() {
-      const s = slides[presentIdx];
-      $('#presentTitle').textContent = s.title || 'Sem título';
-      $('#presentBody').textContent = s.body || '';
-      $('#presentCounter').textContent = (presentIdx + 1) + ' / ' + slides.length;
-      const wrap = $('#presentImageWrap');
-      if (s.image) { $('#presentImageEl').src = s.image; wrap.hidden = false; } else { wrap.hidden = true; }
-    }
-    function openPresent() {
-      presentIdx = Math.max(0, slides.findIndex(s => s.id === active));
-      renderPresent();
-      $('#presentOverlay').hidden = false;
-      if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
-    }
-    function closePresent() {
-      $('#presentOverlay').hidden = true;
-      if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
-    }
-    $('#presentBtn').addEventListener('click', openPresent);
-    $('#presentExit').addEventListener('click', closePresent);
-    $('#presentPrev').addEventListener('click', () => { presentIdx = (presentIdx - 1 + slides.length) % slides.length; renderPresent(); });
-    $('#presentNext').addEventListener('click', () => { presentIdx = (presentIdx + 1) % slides.length; renderPresent(); });
-    document.addEventListener('keydown', e => {
-      if ($('#presentOverlay').hidden) return;
-      if (e.key === 'Escape') closePresent();
-      else if (e.key === 'ArrowRight' || e.key === ' ') { presentIdx = (presentIdx + 1) % slides.length; renderPresent(); }
-      else if (e.key === 'ArrowLeft') { presentIdx = (presentIdx - 1 + slides.length) % slides.length; renderPresent(); }
-    });
-
-    $('#exportSlidesBtn').addEventListener('click', async () => {
-      try {
-        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
-        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.11.0/pptxgen.min.js');
-        const Ctor = window.PptxGenJS || window.pptxgen;
-        const pres = new Ctor();
-        slides.forEach(s => {
-          const slide = pres.addSlide();
-          const textW = s.image ? 5.2 : 9;
-          slide.addText(s.title || 'Sem título', { x: 0.6, y: 0.6, w: textW, h: 1.1, fontFace: 'Georgia', fontSize: 28, bold: true, color: '0F6B5C' });
-          slide.addText(s.body || '', { x: 0.6, y: 1.8, w: textW, h: 4.5, fontFace: 'Arial', fontSize: 16, color: '333333' });
-          if (s.image) slide.addImage({ data: s.image, x: 6.2, y: 0.9, w: 3.2, h: 3.2, sizing: { type: 'contain', w: 3.2, h: 3.2 } });
-        });
-        let data;
-        try { data = await pres.write({ outputType: 'arraybuffer' }); }
-        catch (inner) { data = await pres.write('arraybuffer'); }
-        await exportFile('apresentacao.pptx', data);
-      } catch (e) {
-        if (!e || e.code !== 'declined') alert('Não foi possível gerar a apresentação agora. Verifique a conexão e tente novamente.');
-      }
-    });
-
-    renderStrip(); renderCanvas();
-  }
-
-  /* ============================================================
      Agenda
   ============================================================ */
   function initCalendar() {
@@ -1358,7 +1130,7 @@
     function eventHue(key) {
       let h = 0;
       for (let i = 0; i < key.length; i++) h = ((h << 5) - h + key.charCodeAt(i)) | 0;
-      const palette = [38, 52, 78, 108, 142, 170, 198, 222, 258, 292, 322, 346];
+      const palette = [44, 145, 198, 222, 260, 338];
       return palette[Math.abs(h) % palette.length];
     }
 
@@ -1555,7 +1327,7 @@
   ============================================================ */
   (async function boot() {
     await initBackend();
-    initDocs(); initSheets(); initSlides(); initCalendar(); initFiles();
+    initDocs(); initSheets(); initCalendar(); initFiles();
     const splash = $('#splash');
     setTimeout(() => {
       splash.classList.add('hidden');

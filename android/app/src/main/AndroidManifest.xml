@@ -3,9 +3,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/solut_logo"
+        android:icon="@drawable/solut_logo_exact"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/solut_logo"
+        android:roundIcon="@drawable/solut_logo_exact"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
