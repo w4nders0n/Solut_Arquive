@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Logo Solut Arquive">
+  <defs>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5267F4"/><stop offset="1" stop-color="#2D55D9"/></linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#72DDB0"/><stop offset="1" stop-color="#45B98A"/></linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD36A"/><stop offset="1" stop-color="#F4B83E"/></linearGradient>
+  </defs>
+  <rect x="72" y="48" width="270" height="300" rx="54" transform="rotate(-8 72 48)" fill="url(#blue)"/>
+  <rect x="104" y="88" width="270" height="300" rx="54" transform="rotate(2 104 88)" fill="url(#green)"/>
+  <path d="M176 184h224a30 30 0 0 1 30 30v118a30 30 0 0 1-30 30H176a30 30 0 0 1-30-30V214a30 30 0 0 1 30-30Z" fill="url(#yellow)"/>
+  <path d="M222 344c0-33 25-59 57-59 9 0 18 2 26 6 12-24 37-40 65-40 41 0 74 33 74 74 0 7-1 13-3 19H222Z" fill="#FFFDF8"/>
+  <path d="M221 345c0-32 25-58 57-58 9 0 18 2 26 6 12-24 37-40 65-40 40 0 73 32 73 73 0 7-1 13-3 19H221Z" fill="none" stroke="#4166DF" stroke-width="14" stroke-linejoin="round"/>
+</svg>
