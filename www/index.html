@@ -43,16 +43,23 @@
   body { margin: 0; font-family: var(--font-ui); background: var(--paper); color: var(--ink); -webkit-font-smoothing: antialiased; }
   ::selection { background: var(--accent-soft); color: var(--accent); }
   button { font-family: inherit; cursor: pointer; }
+  button, .icon-btn, .tb-btn, .side-btn, .tab, .sheet-tab, .file-row, .module { transition: transform .14s ease, opacity .14s ease, background-color .14s ease, border-color .14s ease, color .14s ease; }
+  button:active:not(:disabled), .icon-btn:active:not(:disabled) { transform: scale(.97); }
+  .module.active { animation: moduleIn .18s ease both; }
+  .file-row { animation: rowIn .18s ease both; }
+  .sheet-tab { animation: rowIn .14s ease both; }
+  @keyframes moduleIn { from { opacity: .78; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
   input, textarea, select { font-family: inherit; color: inherit; }
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
 
   /* Splash */
-  #splash { position: fixed; inset: 0; background: var(--paper); z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; transition: opacity .35s ease; }
+  #splash { position: fixed; inset: 0; background: #333; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; transition: opacity .35s ease; }
   #splash.hidden { opacity: 0; pointer-events: none; }
-  .splash-word { font-family: var(--font-display); font-weight: 700; font-size: 26px; color: var(--ink); opacity: 0; transform: translateX(-22px); clip-path: inset(0 100% 0 0); animation: splashWordIn .6s cubic-bezier(.2,.7,.3,1) forwards; white-space: nowrap; }
-  #splash .ld { font-size: 12.5px; color: var(--ink-faint); opacity: 0; animation: splashFade .4s .5s ease forwards; }
+  .splash-word { font-family: var(--font-display); font-weight: 700; font-size: 26px; color: #fff; opacity: 0; transform: translateX(-22px); clip-path: inset(0 100% 0 0); animation: splashWordIn .6s cubic-bezier(.2,.7,.3,1) forwards; white-space: nowrap; }
+  #splash .ld { font-size: 12.5px; color: #d7d7d7; opacity: 0; animation: splashFade .4s .5s ease forwards; }
   @keyframes splashWordIn { from { opacity: 0; transform: translateX(-22px); clip-path: inset(0 100% 0 0); } to { opacity: 1; transform: translateX(0); clip-path: inset(0 0 0 0); } }
   @keyframes splashFade { from { opacity: 0; } to { opacity: 1; } }
 
@@ -186,6 +193,8 @@
   .cal-day:hover { background: var(--paper-2); }
   .cal-day.muted { color: var(--ink-faint); background: var(--paper); }
   .cal-day.today .dnum { background: var(--accent); color: #fff; }
+  .cal-day.has-event::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .38; background: repeating-linear-gradient(135deg, transparent 0 7px, hsl(var(--event-hue), 72%, 82%) 7px 9px, transparent 9px 16px); }
+  .cal-day.has-event > * { position: relative; z-index: 1; }
   .dnum { font-size: 12px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
   .cal-evt { font-size: 10.5px; padding: 2px 6px; border-radius: 3px; background: var(--amber-soft); color: var(--amber); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-left: 2px solid var(--amber); }
   .cal-popover { position: fixed; z-index: 50; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m); box-shadow: var(--shadow-page); padding: 14px; width: 260px; display: flex; flex-direction: column; gap: 8px; max-height: 70vh; overflow-y: auto; }
@@ -210,6 +219,11 @@
   .file-row .ficon img { width: 100%; height: 100%; object-fit: cover; }
   .file-row .fname { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .file-row .fmeta { color: var(--ink-faint); font-size: 12px; margin-left: auto; display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+  .trash-panel { display:none; border-bottom:1px solid var(--line); background:var(--paper-2); padding:10px 22px; }
+  .trash-panel.open { display:block; animation: rowIn .18s ease both; }
+  .trash-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .trash-item { display:flex; align-items:center; gap:10px; padding:7px 0; border-top:1px solid var(--line); font-size:12.5px; }
+  .trash-item .name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
   /* Image editor overlay */
 
@@ -396,11 +410,15 @@
     <section class="module" id="mod-files">
       <div class="files-head">
         <h2>Arquivos</h2>
-        <label class="icon-btn filled" style="margin-left:auto" title="Enviar arquivo" aria-label="Enviar arquivo">
+        <button class="icon-btn" id="trashBtn" title="Lixeira" aria-label="Abrir lixeira" style="margin-left:auto">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M9 6V4h6v2M8 10v7M12 10v7M16 10v7"/><path d="M5 6l1 15h12l1-15"/></svg>
+        </button>
+        <label class="icon-btn filled" title="Enviar arquivo" aria-label="Enviar arquivo">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></svg>
           <input type="file" id="fileInput" multiple style="display:none">
         </label>
       </div>
+      <div class="trash-panel" id="trashPanel"></div>
       <div class="files-list" id="filesList"></div>
     </section>
 
@@ -488,6 +506,7 @@
         slides: LS.get('sa:slides', null),
         calendarEvents: LS.get('sa:events', null),
         files: LS.get('sa:files', null),
+        trash: LS.get('sa:trash', null),
         updatedAt: Date.now()
       };
       try { await backend.db.doc('data/users/' + backend.uid + '/data').set(payload); } catch (e) {}
@@ -513,6 +532,7 @@
           if (d.slides) LS.set('sa:slides', d.slides);
           if (d.calendarEvents) LS.set('sa:events', d.calendarEvents);
           if (d.files) LS.set('sa:files', d.files);
+          if (d.trash) LS.set('sa:trash', d.trash);
         }
         const accRef = backend.db.doc('data/users/' + backend.uid + '/account');
         const accSnap = await accRef.get();
@@ -546,9 +566,20 @@
   }
 
   async function exportFile(filename, data) {
-    if (!backend.downloads) { alert('Salvar arquivos não está disponível neste momento.'); return; }
-    try { await backend.downloads.save({ filename, data }); }
-    catch (e) { if (!e || e.code !== 'declined') alert('Não foi possível salvar o arquivo agora. Tente novamente em instantes.'); }
+    try {
+      if (backend.downloads && backend.downloads.save) {
+        await backend.downloads.save({ filename, data });
+        return;
+      }
+      const blob = data instanceof Blob ? data : new Blob([data], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.style.display = 'none';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (e) {
+      if (!e || e.code !== 'declined') alert('Não foi possível salvar o arquivo agora. Tente novamente em instantes.');
+    }
   }
 
   /* ============================================================
@@ -1015,6 +1046,19 @@
         save(); renderSheetTabs(); renderTable();
       });
       bar.appendChild(add);
+      const del = document.createElement('button');
+      del.className = 'icon-btn sm danger'; del.title = 'Excluir planilha'; del.setAttribute('aria-label', 'Excluir planilha');
+      del.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 7h16M10 11v6M14 11v6M9 7l1-2h4l1 2M6 7l1 14h10l1-14"/></svg>';
+      del.addEventListener('click', () => {
+        if (sheets.order.length <= 1) { alert('É necessário manter pelo menos uma planilha.'); return; }
+        if (!confirm('Excluir a planilha "' + sheets.active + '"?')) return;
+        const name = sheets.active;
+        sheets.order = sheets.order.filter(n => n !== name);
+        delete sheets.data[name]; delete sheets.styles[name];
+        sheets.active = sheets.order[0];
+        save(); renderSheetTabs(); renderTable();
+      });
+      bar.appendChild(del);
     }
 
     $('#exportSheetBtn').addEventListener('click', async () => {
@@ -1194,10 +1238,15 @@
 
       cells.forEach(c => {
         const el = document.createElement('div');
-        el.className = 'cal-day' + (c.muted ? ' muted' : '') + (sameDay(c.date, today) ? ' today' : '');
         const k = keyFor(c.date);
+        const dayEvents = events[k] || [];
+        el.className = 'cal-day' + (c.muted ? ' muted' : '') + (sameDay(c.date, today) ? ' today' : '') + (dayEvents.length ? ' has-event' : '');
+        if (dayEvents.length) {
+          const hue = (Math.abs(c.date.getFullYear() * 17 + (c.date.getMonth() + 1) * 31 + c.date.getDate() * 13) % 360);
+          el.style.setProperty('--event-hue', hue);
+        }
         let html = '<div class="dnum">' + c.day + '</div>';
-        (events[k] || []).forEach(ev => {
+        dayEvents.forEach(ev => {
           const remind = typeof ev === 'object' && ev.remind;
           html += '<div class="cal-evt">' + (remind ? '\uD83D\uDD14 ' : '') + escapeHtml(titleOf(ev)) + '</div>';
         });
@@ -1308,7 +1357,9 @@
   ============================================================ */
   function initFiles() {
     let files = LS.get('sa:files', []);
-    function save() { LS.set('sa:files', files); }
+    let trash = LS.get('sa:trash', []);
+    function save() { LS.set('sa:files', files); scheduleBackendSave(); }
+    function saveTrash() { LS.set('sa:trash', trash); scheduleBackendSave(); }
     function fmtSize(bytes) {
       if (bytes < 1024) return bytes + ' B';
       if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
@@ -1316,40 +1367,65 @@
     }
     function ext(name) { const parts = name.split('.'); return parts.length > 1 ? parts.pop().toUpperCase().slice(0, 4) : '—'; }
 
+    function renderTrash() {
+      const panel = $('#trashPanel');
+      if (!trash.length) {
+        panel.innerHTML = '<div class="trash-head"><strong>Lixeira</strong><span style="margin-left:auto;color:var(--ink-faint);font-size:12px">vazia</span></div>';
+        return;
+      }
+      panel.innerHTML = '<div class="trash-head"><strong>Lixeira</strong><button class="icon-btn sm danger" id="emptyTrashBtn" title="Esvaziar lixeira" aria-label="Esvaziar lixeira" style="margin-left:auto">×</button></div>';
+      trash.forEach((f, i) => {
+        const row = document.createElement('div'); row.className = 'trash-item';
+        row.innerHTML = '<div class="name"></div><button class="icon-btn sm" title="Restaurar">↶</button><button class="icon-btn sm danger" title="Excluir permanentemente">×</button>';
+        row.querySelector('.name').textContent = f.name;
+        row.querySelectorAll('button')[0].addEventListener('click', () => {
+          const restored = Object.assign({}, f); delete restored.deletedAt;
+          files.unshift(restored); trash.splice(i, 1); save(); saveTrash(); render(); renderTrash();
+        });
+        row.querySelectorAll('button')[1].addEventListener('click', () => {
+          if (!confirm('Excluir "' + f.name + '" permanentemente?')) return;
+          trash.splice(i, 1); saveTrash(); renderTrash();
+        });
+        panel.appendChild(row);
+      });
+      $('#emptyTrashBtn').addEventListener('click', () => {
+        if (!confirm('Esvaziar a lixeira permanentemente?')) return;
+        trash = []; saveTrash(); renderTrash();
+      });
+    }
+
     function render() {
       const list = $('#filesList');
       if (!files.length) {
-        list.innerHTML = '<div class="empty"><div class="icon">\u25C7</div><h3>Nenhum arquivo ainda</h3><p>Envie arquivos para deixá-los à mão neste espaço de trabalho.</p></div>';
+        list.innerHTML = '<div class="empty"><div class="icon">◇</div><h3>Nenhum arquivo ainda</h3><p>Envie arquivos para deixá-los à mão neste espaço de trabalho.</p></div>';
         return;
       }
       list.innerHTML = '';
       files.forEach((f, i) => {
-        const row = document.createElement('div');
-        row.className = 'file-row';
-        row.innerHTML = '<div class="ficon">' + ext(f.name) + '</div><div class="fname"></div>'
-          + '<div class="fmeta"><span>' + fmtSize(f.size || 0) + '</span><span>' + f.date + '</span></div>';
+        const row = document.createElement('div'); row.className = 'file-row';
+        row.innerHTML = '<div class="ficon">' + ext(f.name) + '</div><div class="fname"></div><div class="fmeta"><span>' + fmtSize(f.size || 0) + '</span><span>' + f.date + '</span></div>';
         row.querySelector('.fname').textContent = f.name;
-
         const delBtn = document.createElement('button');
-        delBtn.className = 'icon-btn sm danger'; delBtn.title = 'Remover'; delBtn.setAttribute('aria-label', 'Remover arquivo');
+        delBtn.className = 'icon-btn sm danger'; delBtn.title = 'Mover para lixeira'; delBtn.setAttribute('aria-label', 'Mover arquivo para lixeira');
         delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>';
-        delBtn.addEventListener('click', () => { files.splice(i, 1); save(); render(); });
-        row.querySelector('.fmeta').appendChild(delBtn);
-
-        list.appendChild(row);
+        delBtn.addEventListener('click', () => {
+          const removed = files.splice(i, 1)[0];
+          if (removed) { removed.deletedAt = new Date().toISOString(); trash.unshift(removed); }
+          save(); saveTrash(); render(); renderTrash();
+        });
+        row.querySelector('.fmeta').appendChild(delBtn); list.appendChild(row);
       });
     }
 
+    $('#trashBtn').addEventListener('click', () => $('#trashPanel').classList.toggle('open'));
     $('#fileInput').addEventListener('change', e => {
       Array.from(e.target.files).forEach(file => {
         files.unshift({ name: file.name, size: file.size, date: new Date().toLocaleDateString('pt-BR') });
         incrementUsage();
       });
-      e.target.value = '';
-      save(); render();
+      e.target.value = ''; save(); render();
     });
-
-    render();
+    render(); renderTrash();
   }
 
   $('#search').addEventListener('keydown', e => {
