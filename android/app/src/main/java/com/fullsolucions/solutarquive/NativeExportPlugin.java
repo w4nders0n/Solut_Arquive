@@ -37,6 +37,14 @@ public class NativeExportPlugin extends Plugin {
         }
 
         filename = new File(filename).getName();
+        if (filename.isEmpty()) {
+            call.reject("Nome do arquivo inválido");
+            return;
+        }
+
+        // Aceita tanto base64 puro quanto data URLs, caso o chamador forneça uma.
+        int comma = data.indexOf(',');
+        if (data.startsWith("data:") && comma >= 0) data = data.substring(comma + 1);
 
         try {
             byte[] bytes = Base64.decode(data, Base64.DEFAULT);
@@ -54,6 +62,7 @@ public class NativeExportPlugin extends Plugin {
                 File target = new File(folder, filename);
                 try (OutputStream out = new FileOutputStream(target)) {
                     out.write(bytes);
+                    out.flush();
                 }
                 uri = Uri.fromFile(target);
             }
@@ -61,6 +70,7 @@ public class NativeExportPlugin extends Plugin {
             JSObject result = new JSObject();
             result.put("uri", uri.toString());
             result.put("filename", filename);
+            result.put("location", "Downloads/Solut_Arquive");
             call.resolve(result);
         } catch (Exception e) {
             call.reject("Não foi possível salvar o arquivo: " + e.getMessage(), e);
@@ -78,14 +88,19 @@ public class NativeExportPlugin extends Plugin {
         Uri uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
         if (uri == null) throw new Exception("Não foi possível criar o arquivo em Downloads");
 
-        try (OutputStream out = resolver.openOutputStream(uri)) {
-            if (out == null) throw new Exception("Não foi possível abrir o arquivo");
-            out.write(bytes);
+        try {
+            try (OutputStream out = resolver.openOutputStream(uri)) {
+                if (out == null) throw new Exception("Não foi possível abrir o arquivo");
+                out.write(bytes);
+                out.flush();
+            }
+            ContentValues done = new ContentValues();
+            done.put(MediaStore.MediaColumns.IS_PENDING, 0);
+            resolver.update(uri, done, null, null);
+            return uri;
+        } catch (Exception e) {
+            try { resolver.delete(uri, null, null); } catch (Exception ignored) {}
+            throw e;
         }
-
-        ContentValues done = new ContentValues();
-        done.put(MediaStore.MediaColumns.IS_PENDING, 0);
-        resolver.update(uri, done, null, null);
-        return uri;
     }
 }

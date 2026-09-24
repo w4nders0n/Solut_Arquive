@@ -111,8 +111,8 @@
   .rail-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
   .rail-title { font-size: 11px; letter-spacing: .2px; color: var(--ink-faint); font-weight: 600; }
   .mobile-menu-btn { display:none; }
-  .mobile-drawer-backdrop { display:none; position:fixed; inset:0; background:rgba(20,23,15,.28); z-index:119; }
-  .mobile-drawer-backdrop.open { display:block; animation: splashFade .14s ease both; }
+  .mobile-drawer-backdrop { display:block; position:fixed; inset:0; background:rgba(20,23,15,.28); z-index:900; opacity:0; visibility:hidden; pointer-events:none; transition:opacity .16s ease, visibility .16s ease; }
+  .mobile-drawer-backdrop.open { opacity:1; visibility:visible; pointer-events:auto; }
   .mention-popover { position:fixed; z-index:400; width:min(320px, calc(100vw - 24px)); max-height:280px; overflow:auto; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-m); box-shadow:var(--shadow-page); padding:6px; }
   .mention-popover[hidden] { display:none; }
   .mention-head { padding:7px 9px 6px; font-size:11px; color:var(--ink-faint); border-bottom:1px solid var(--line); }
@@ -244,7 +244,7 @@
     .brand { gap:6px; }
     .brand .mark { font-size:16px; }
     .omnibox { max-width:none; min-width:0; padding:7px 9px; }
-    .rail, #mod-slides .slide-strip { width:min(292px, 82vw); position:fixed; left:0; top:0; bottom:0; z-index:120; transform:translateX(-105%); box-shadow:none; transition:transform .2s ease, box-shadow .2s ease; }
+    .rail, #mod-slides .slide-strip { width:min(292px, 82vw); position:fixed; left:0; top:0; bottom:0; z-index:1001; transform:translateX(-105%); box-shadow:none; transition:transform .2s ease, box-shadow .2s ease; }
     .rail.mobile-open, #mod-slides .slide-strip.mobile-open { transform:translateX(0); box-shadow:8px 0 28px rgba(0,0,0,.18); }
     .rail .side-btn span.label { display:block; }
     .doc-page { padding:34px 22px; }
@@ -754,30 +754,46 @@
   }
 
   async function exportFile(filename, data) {
-    try {
-      if (backend.downloads && backend.downloads.save) {
-        await backend.downloads.save({ filename, data });
-        return;
-      }
-      const cap = window.Capacitor;
-      if (cap && cap.getPlatform && cap.getPlatform() === 'android') {
-        const NativeExport = cap.__saNativeExport || (cap.registerPlugin ? (cap.__saNativeExport = cap.registerPlugin('NativeExport')) : null);
-        if (!NativeExport) throw new Error('native_export_unavailable');
+    const cap = window.Capacitor;
+    const isAndroid = !!(cap && cap.getPlatform && cap.getPlatform() === 'android');
+
+    // No Android, use o plugin nativo primeiro. O provider de downloads do
+    // ambiente web pode existir, mas não tem acesso confiável ao Downloads.
+    if (isAndroid) {
+      try {
+        if (!cap.__saNativeExport && cap.registerPlugin) cap.__saNativeExport = cap.registerPlugin('NativeExport');
+        const NativeExport = cap.__saNativeExport;
+        if (!NativeExport || typeof NativeExport.saveFile !== 'function') throw new Error('native_export_unavailable');
         const base64 = await dataToBase64(data);
         const result = await NativeExport.saveFile({ filename, data: base64, mimeType: mimeForFilename(filename) });
         if (result && result.uri) {
           alert('Arquivo salvo em Downloads/Solut_Arquive.');
-          return;
+          return true;
         }
+        throw new Error('native_export_no_uri');
+      } catch (nativeError) {
+        console.error('Solut_Arquive: exportação nativa falhou', nativeError);
+        // Continua para o fallback abaixo.
       }
+    }
+
+    try {
+      if (backend.downloads && backend.downloads.save) {
+        await backend.downloads.save({ filename, data });
+        return true;
+      }
+
       const blob = data instanceof Blob ? data : new Blob([data], { type: mimeForFilename(filename) });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url; a.download = filename; a.style.display = 'none';
       document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+      return true;
     } catch (e) {
+      console.error('Solut_Arquive: exportação falhou', e);
       if (!e || e.code !== 'declined') alert('Não foi possível salvar o arquivo agora. Tente novamente em instantes.');
+      return false;
     }
   }
 
@@ -1004,7 +1020,8 @@
   $('#mobileMenuBtn').addEventListener('click', () => {
     if (mobileDrawerTarget) closeMobileDrawer(); else openMobileDrawer();
   });
-  $('#mobileDrawerBackdrop').addEventListener('click', closeMobileDrawer);
+  $('#mobileDrawerBackdrop').addEventListener('click', ev => { if (ev.target === ev.currentTarget) closeMobileDrawer(); });
+  $('#mobileDrawerBackdrop').addEventListener('touchend', ev => { if (ev.target === ev.currentTarget) closeMobileDrawer(); }, { passive: true });
   window.addEventListener('resize', () => { if (window.innerWidth > 760) closeMobileDrawer(); });
 
   /* ============================================================
