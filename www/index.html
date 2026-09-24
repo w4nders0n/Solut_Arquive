@@ -43,23 +43,16 @@
   body { margin: 0; font-family: var(--font-ui); background: var(--paper); color: var(--ink); -webkit-font-smoothing: antialiased; }
   ::selection { background: var(--accent-soft); color: var(--accent); }
   button { font-family: inherit; cursor: pointer; }
-  button, .icon-btn, .tb-btn, .side-btn, .tab, .sheet-tab, .file-row, .module { transition: transform .14s ease, opacity .14s ease, background-color .14s ease, border-color .14s ease, color .14s ease; }
-  button:active:not(:disabled), .icon-btn:active:not(:disabled) { transform: scale(.97); }
-  .module.active { animation: moduleIn .18s ease both; }
-  .file-row { animation: rowIn .18s ease both; }
-  .sheet-tab { animation: rowIn .14s ease both; }
-  @keyframes moduleIn { from { opacity: .78; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes rowIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
   input, textarea, select { font-family: inherit; color: inherit; }
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
 
   /* Splash */
-  #splash { position: fixed; inset: 0; background: #333; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; transition: opacity .35s ease; }
+  #splash { position: fixed; inset: 0; background: var(--paper); z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; transition: opacity .35s ease; }
   #splash.hidden { opacity: 0; pointer-events: none; }
-  .splash-word { font-family: var(--font-display); font-weight: 700; font-size: 26px; color: #fff; opacity: 0; transform: translateX(-22px); clip-path: inset(0 100% 0 0); animation: splashWordIn .6s cubic-bezier(.2,.7,.3,1) forwards; white-space: nowrap; }
-  #splash .ld { font-size: 12.5px; color: #d7d7d7; opacity: 0; animation: splashFade .4s .5s ease forwards; }
+  .splash-word { font-family: var(--font-display); font-weight: 700; font-size: 26px; color: var(--ink); opacity: 0; transform: translateX(-22px); clip-path: inset(0 100% 0 0); animation: splashWordIn .6s cubic-bezier(.2,.7,.3,1) forwards; white-space: nowrap; }
+  #splash .ld { font-size: 12.5px; color: var(--ink-faint); opacity: 0; animation: splashFade .4s .5s ease forwards; }
   @keyframes splashWordIn { from { opacity: 0; transform: translateX(-22px); clip-path: inset(0 100% 0 0); } to { opacity: 1; transform: translateX(0); clip-path: inset(0 0 0 0); } }
   @keyframes splashFade { from { opacity: 0; } to { opacity: 1; } }
 
@@ -110,17 +103,6 @@
   .rail { width: 230px; flex-shrink: 0; border-right: 1px solid var(--line); background: var(--paper-2); display: flex; flex-direction: column; padding: 14px; gap: 4px; overflow-y: auto; }
   .rail-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
   .rail-title { font-size: 11px; letter-spacing: .2px; color: var(--ink-faint); font-weight: 600; }
-  .mobile-menu-btn { display:none; }
-  .mobile-drawer-backdrop { display:block; position:fixed; inset:0; background:rgba(20,23,15,.28); z-index:900; opacity:0; visibility:hidden; pointer-events:none; transition:opacity .16s ease, visibility .16s ease; }
-  .mobile-drawer-backdrop.open { opacity:1; visibility:visible; pointer-events:auto; }
-  .mention-popover { position:fixed; z-index:400; width:min(320px, calc(100vw - 24px)); max-height:280px; overflow:auto; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-m); box-shadow:var(--shadow-page); padding:6px; }
-  .mention-popover[hidden] { display:none; }
-  .mention-head { padding:7px 9px 6px; font-size:11px; color:var(--ink-faint); border-bottom:1px solid var(--line); }
-  .mention-item { width:100%; display:flex; align-items:center; gap:8px; border:0; background:none; color:var(--ink); padding:8px 9px; border-radius:var(--radius-s); text-align:left; font-size:13px; }
-  .mention-item:hover, .mention-item:focus { background:var(--paper-2); outline:none; }
-  .mention-item .mi-icon { width:25px; height:25px; border-radius:var(--radius-s); display:flex; align-items:center; justify-content:center; background:var(--accent-soft); color:var(--accent); font:700 9px var(--font-mono); flex-shrink:0; }
-  .mention-item .mi-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .file-mention { color:var(--accent); background:var(--accent-soft); border-radius:3px; padding:1px 3px; white-space:nowrap; }
 
   /* Docs */
   #mod-docs .doc-body { flex: 1; display: flex; flex-direction: column; min-width: 0; }
@@ -204,8 +186,6 @@
   .cal-day:hover { background: var(--paper-2); }
   .cal-day.muted { color: var(--ink-faint); background: var(--paper); }
   .cal-day.today .dnum { background: var(--accent); color: #fff; }
-  .cal-day.has-event::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .38; background: repeating-linear-gradient(135deg, transparent 0 7px, hsl(var(--event-hue), 72%, 82%) 7px 9px, transparent 9px 16px); }
-  .cal-day.has-event > * { position: relative; z-index: 1; }
   .dnum { font-size: 12px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
   .cal-evt { font-size: 10.5px; padding: 2px 6px; border-radius: 3px; background: var(--amber-soft); color: var(--amber); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-left: 2px solid var(--amber); }
   .cal-popover { position: fixed; z-index: 50; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m); box-shadow: var(--shadow-page); padding: 14px; width: 260px; display: flex; flex-direction: column; gap: 8px; max-height: 70vh; overflow-y: auto; }
@@ -230,32 +210,102 @@
   .file-row .ficon img { width: 100%; height: 100%; object-fit: cover; }
   .file-row .fname { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .file-row .fmeta { color: var(--ink-faint); font-size: 12px; margin-left: auto; display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
-  .trash-panel { display:none; border-bottom:1px solid var(--line); background:var(--paper-2); padding:10px 22px; }
-  .trash-panel.open { display:block; animation: rowIn .18s ease both; }
-  .trash-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-  .trash-item { display:flex; align-items:center; gap:10px; padding:7px 0; border-top:1px solid var(--line); font-size:12.5px; }
-  .trash-item .name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
   /* Image editor overlay */
 
+
+  /* Mobile sidebar drawer */
+  .mobile-menu-btn { display:none; }
+  .mobile-drawer-backdrop { display:none; position:fixed; inset:0; background:rgba(20,23,15,.28); z-index:1190; }
+  .mobile-drawer-backdrop.open { display:block; }
+  .mobile-drawer { display:none; }
+
   @media (max-width: 760px) {
-    .topbar { padding-left: 12px; padding-right: 12px; gap: 8px; }
-    .mobile-menu-btn { display:flex; }
-    .brand { gap:6px; }
-    .brand .mark { font-size:16px; }
-    .omnibox { max-width:none; min-width:0; padding:7px 9px; }
-    .rail, #mod-slides .slide-strip { width:min(292px, 82vw); position:fixed; left:0; top:0; bottom:0; z-index:1001; transform:translateX(-105%); box-shadow:none; transition:transform .2s ease, box-shadow .2s ease; }
-    .rail.mobile-open, #mod-slides .slide-strip.mobile-open { transform:translateX(0); box-shadow:8px 0 28px rgba(0,0,0,.18); }
-    .rail .side-btn span.label { display:block; }
-    .doc-page { padding:34px 22px; }
-    .slide-canvas { padding:28px; flex-direction:column; }
-    .slide-image-wrap { flex:0 0 auto; max-height:30%; }
-    .slide-title-edit { font-size:22px; }
-    .cal-grid { grid-auto-rows:minmax(64px, 1fr); }
-    .cal-evt { display:none; }
-    .tb-select { max-width:64px; }
-    .present-slide { flex-direction:column; }
-    .mention-popover { max-height:240px; }
+    .mobile-menu-btn {
+      display:flex;
+      position:relative;
+      z-index:1202;
+      flex:0 0 auto;
+      pointer-events:auto;
+      touch-action:manipulation;
+    }
+    .mobile-drawer-backdrop { z-index:1190; }
+    .mobile-drawer {
+      display:flex;
+      position:fixed;
+      top:0;
+      left:0;
+      bottom:0;
+      width:min(82vw, 320px);
+      max-width:320px;
+      z-index:1201;
+      background:var(--paper-2);
+      border-right:1px solid var(--line);
+      box-shadow:12px 0 35px rgba(0,0,0,.18);
+      transform:translateX(-105%);
+      transition:transform .18s ease;
+      overflow:hidden;
+      pointer-events:none;
+      padding:14px;
+      flex-direction:column;
+    }
+    .mobile-drawer.open {
+      transform:translateX(0);
+      pointer-events:auto;
+    }
+    .mobile-drawer-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:2px 0 12px;
+      border-bottom:1px solid var(--line);
+      margin-bottom:8px;
+      flex:0 0 auto;
+    }
+    .mobile-drawer-title {
+      font-size:11px;
+      letter-spacing:.2px;
+      color:var(--ink-faint);
+      font-weight:600;
+    }
+    .mobile-drawer-content {
+      min-height:0;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      flex:1;
+    }
+    .mobile-drawer .rail,
+    .mobile-drawer .slide-strip {
+      display:flex !important;
+      width:100% !important;
+      max-width:none;
+      height:auto;
+      min-height:100%;
+      border:0 !important;
+      padding:0 !important;
+      background:transparent;
+      overflow:visible;
+    }
+    .mobile-drawer .rail .side-btn span.label { display:block; }
+    .mobile-drawer .side-btn { min-height:42px; }
+    .mobile-drawer .slide-strip { flex-direction:column; }
+
+    /* The original rails stay hidden while the drawer is active on portrait. */
+    #mobileDrawer:not(.open) { pointer-events:none; }
+    body.mobile-drawer-open { overflow:hidden; }
+  }
+  @media (max-width: 760px) {
+    .omnibox { max-width: 150px; }
+    .rail, #mod-slides .slide-strip { width: 74px; }
+    .rail .side-btn span.label { display: none; }
+    .doc-page { padding: 34px 22px; }
+    .slide-canvas { padding: 28px; flex-direction: column; }
+    .slide-image-wrap { flex: 0 0 auto; max-height: 30%; }
+    .slide-title-edit { font-size: 22px; }
+    .cal-grid { grid-auto-rows: minmax(64px, 1fr); }
+    .cal-evt { display: none; }
+    .tb-select { max-width: 64px; }
+    .present-slide { flex-direction: column; }
   }
 </style>
 </head>
@@ -270,8 +320,9 @@
 <div id="app">
 
   <header class="topbar">
+
     <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" title="Abrir menu lateral" aria-label="Abrir menu lateral" aria-expanded="false">
-      <svg id="mobileMenuIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg id="mobileMenuIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
     <div class="brand">
       <span class="mark">Solut_Arquive</span>
@@ -295,8 +346,16 @@
     <button class="tab" data-mod="files"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Arquivos</button>
   </nav>
 
-  <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop"></div>
-  <div class="mention-popover" id="fileMentionPopover" hidden></div>
+  <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" aria-hidden="true"></div>
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="mobile-drawer-head">
+      <span class="mobile-drawer-title" id="mobileDrawerTitle">MENU</span>
+      <button class="icon-btn sm" id="mobileDrawerClose" title="Fechar menu lateral" aria-label="Fechar menu lateral">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="mobile-drawer-content" id="mobileDrawerContent"></div>
+  </aside>
 
   <main class="canvas">
 
@@ -433,15 +492,11 @@
     <section class="module" id="mod-files">
       <div class="files-head">
         <h2>Arquivos</h2>
-        <button class="icon-btn" id="trashBtn" title="Lixeira" aria-label="Abrir lixeira" style="margin-left:auto">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M9 6V4h6v2M8 10v7M12 10v7M16 10v7"/><path d="M5 6l1 15h12l1-15"/></svg>
-        </button>
-        <label class="icon-btn filled" title="Enviar arquivo" aria-label="Enviar arquivo">
+        <label class="icon-btn filled" style="margin-left:auto" title="Enviar arquivo" aria-label="Enviar arquivo">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></svg>
           <input type="file" id="fileInput" multiple style="display:none">
         </label>
       </div>
-      <div class="trash-panel" id="trashPanel"></div>
       <div class="files-list" id="filesList"></div>
     </section>
 
@@ -500,155 +555,6 @@
     return (s || 'arquivo').trim().toLowerCase().replace(/[^\w\-]+/g, '_').replace(/_+/g, '_').slice(0, 60) || 'arquivo';
   }
 
-  let mobileDrawerTarget = null;
-
-  function getStoredFiles() {
-    return LS.get('sa:files', []);
-  }
-
-  function fileExt(name) {
-    const p = String(name || '').split('.');
-    return p.length > 1 ? p.pop().toUpperCase().slice(0, 4) : 'ARQ';
-  }
-
-  function closeMobileDrawer() {
-    if (mobileDrawerTarget) mobileDrawerTarget.classList.remove('mobile-open');
-    mobileDrawerTarget = null;
-    const backdrop = $('#mobileDrawerBackdrop');
-    if (backdrop) backdrop.classList.remove('open');
-    const btn = $('#mobileMenuBtn');
-    if (btn) btn.setAttribute('aria-expanded', 'false');
-  }
-
-  function openMobileDrawer() {
-    closeMobileDrawer();
-    const active = $('.module.active');
-    if (!active) return;
-    const target = active.id === 'mod-docs' ? $('#docsRail') : (active.id === 'mod-slides' ? $('#slideStrip') : null);
-    if (!target) return;
-    mobileDrawerTarget = target;
-    target.classList.add('mobile-open');
-    $('#mobileDrawerBackdrop').classList.add('open');
-    $('#mobileMenuBtn').setAttribute('aria-expanded', 'true');
-  }
-
-  function positionMentionPopover(target) {
-    const pop = $('#fileMentionPopover');
-    if (!pop) return;
-    const r = target.getBoundingClientRect ? target.getBoundingClientRect() : { left: 12, bottom: 60 };
-    pop.style.left = Math.min(Math.max(12, r.left), Math.max(12, window.innerWidth - 332)) + 'px';
-    pop.style.top = Math.min(r.bottom + 6, window.innerHeight - 292) + 'px';
-  }
-
-  function hideFileMentionPopover() {
-    const pop = $('#fileMentionPopover');
-    if (pop) pop.hidden = true;
-  }
-
-  function insertMentionText(target, name) {
-    const token = '@' + name;
-    if (target.isContentEditable) {
-      const sel = window.getSelection();
-      if (!sel || !sel.rangeCount) return;
-      const range = sel.getRangeAt(0);
-      let node = range.startContainer;
-      let offset = range.startOffset;
-      if (node.nodeType !== Node.TEXT_NODE) {
-        const text = document.createTextNode('');
-        range.insertNode(text); node = text; offset = 0;
-      }
-      const value = node.textContent || '';
-      const before = value.slice(0, offset);
-      const at = before.lastIndexOf('@');
-      if (at < 0) return;
-      const start = document.createRange();
-      start.setStart(node, at); start.setEnd(node, offset);
-      start.deleteContents();
-      const span = document.createElement('span');
-      span.className = 'file-mention'; span.dataset.fileName = name; span.textContent = token;
-      start.insertNode(span);
-      const tail = document.createTextNode(' ');
-      span.after(tail);
-      const caret = document.createRange(); caret.setStart(tail, 1); caret.collapse(true);
-      sel.removeAllRanges(); sel.addRange(caret);
-      target.dispatchEvent(new Event('input', { bubbles:true }));
-    } else if (typeof target.selectionStart === 'number') {
-      const start = target.selectionStart, end = target.selectionEnd;
-      const value = target.value || '';
-      const before = value.slice(0, start);
-      const at = before.lastIndexOf('@');
-      if (at < 0) return;
-      target.value = value.slice(0, at) + token + ' ' + value.slice(end);
-      const caret = at + token.length + 1;
-      target.setSelectionRange(caret, caret);
-      target.dispatchEvent(new Event('input', { bubbles:true }));
-    }
-    hideFileMentionPopover();
-  }
-
-  function renderFileMentionPopover(target, query) {
-    const pop = $('#fileMentionPopover');
-    if (!pop) return;
-    const files = getStoredFiles();
-    const q = String(query || '').toLowerCase();
-    const matches = files.filter(f => String(f.name || '').toLowerCase().includes(q)).slice(0, 30);
-    pop.innerHTML = '<div class="mention-head">Arquivos · ' + (q ? 'filtrando por @' + escapeHtml(q) : 'digite o nome após @') + '</div>';
-    if (!matches.length) {
-      pop.innerHTML += '<div style="padding:12px 9px;color:var(--ink-faint);font-size:12px">Nenhum arquivo encontrado.</div>';
-    } else {
-      matches.forEach(f => {
-        const b = document.createElement('button'); b.type = 'button'; b.className = 'mention-item';
-        b.innerHTML = '<span class="mi-icon">' + escapeHtml(fileExt(f.name)) + '</span><span class="mi-name"></span>';
-        b.querySelector('.mi-name').textContent = f.name;
-        b.addEventListener('mousedown', e => e.preventDefault());
-        b.addEventListener('click', () => insertMentionText(target, f.name));
-        pop.appendChild(b);
-      });
-    }
-    pop.hidden = false;
-    positionMentionPopover(target);
-  }
-
-  function mentionContext(target) {
-    let value = '';
-    let pos = 0;
-    if (target.isContentEditable) {
-      const sel = window.getSelection();
-      if (!sel || !sel.rangeCount || !target.contains(sel.anchorNode)) return null;
-      const range = sel.getRangeAt(0).cloneRange();
-      range.selectNodeContents(target); range.setEnd(sel.anchorNode, sel.anchorOffset);
-      value = range.toString(); pos = value.length;
-    } else if (typeof target.selectionStart === 'number') {
-      value = target.value || ''; pos = target.selectionStart;
-    } else return null;
-    const before = value.slice(0, pos);
-    const at = before.lastIndexOf('@');
-    if (at < 0 || /\s/.test(before.slice(at + 1))) return null;
-    return before.slice(at + 1);
-  }
-
-  function bindFileMentions() {
-    const selector = 'input[type="text"], textarea, [contenteditable="true"]';
-    document.addEventListener('input', e => {
-      const target = e.target; if (!target.matches || !target.matches(selector)) return;
-      const q = mentionContext(target);
-      if (q !== null) renderFileMentionPopover(target, q); else hideFileMentionPopover();
-    });
-    document.addEventListener('keyup', e => {
-      const target = e.target; if (!target.matches || !target.matches(selector)) return;
-      const q = mentionContext(target);
-      if (q !== null) renderFileMentionPopover(target, q); else hideFileMentionPopover();
-    });
-    document.addEventListener('focusin', e => {
-      const target = e.target; if (!target.matches || !target.matches(selector)) return;
-      const q = mentionContext(target); if (q !== null) renderFileMentionPopover(target, q);
-    });
-    document.addEventListener('click', e => {
-      const pop = $('#fileMentionPopover');
-      if (pop && !pop.contains(e.target) && !(e.target.matches && e.target.matches(selector))) hideFileMentionPopover();
-    });
-  }
-
   const scriptCache = {};
   function loadScript(src) {
     if (scriptCache[src]) return scriptCache[src];
@@ -678,7 +584,6 @@
         slides: LS.get('sa:slides', null),
         calendarEvents: LS.get('sa:events', null),
         files: LS.get('sa:files', null),
-        trash: LS.get('sa:trash', null),
         updatedAt: Date.now()
       };
       try { await backend.db.doc('data/users/' + backend.uid + '/data').set(payload); } catch (e) {}
@@ -704,7 +609,6 @@
           if (d.slides) LS.set('sa:slides', d.slides);
           if (d.calendarEvents) LS.set('sa:events', d.calendarEvents);
           if (d.files) LS.set('sa:files', d.files);
-          if (d.trash) LS.set('sa:trash', d.trash);
         }
         const accRef = backend.db.doc('data/users/' + backend.uid + '/account');
         const accSnap = await accRef.get();
@@ -737,64 +641,10 @@
     }
   }
 
-  function mimeForFilename(filename) {
-    const ext = String(filename).split('.').pop().toLowerCase();
-    return ({ docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document', xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation', pdf:'application/pdf', csv:'text/csv', txt:'text/plain' })[ext] || 'application/octet-stream';
-  }
-
-  async function dataToBase64(data) {
-    if (typeof data === 'string') return btoa(unescape(encodeURIComponent(data)));
-    const blob = data instanceof Blob ? data : new Blob([data]);
-    const buf = await blob.arrayBuffer();
-    const bytes = new Uint8Array(buf);
-    let binary = '';
-    const chunk = 0x8000;
-    for (let i = 0; i < bytes.length; i += chunk) binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
-    return btoa(binary);
-  }
-
   async function exportFile(filename, data) {
-    const cap = window.Capacitor;
-    const isAndroid = !!(cap && cap.getPlatform && cap.getPlatform() === 'android');
-
-    // No Android, use o plugin nativo primeiro. O provider de downloads do
-    // ambiente web pode existir, mas não tem acesso confiável ao Downloads.
-    if (isAndroid) {
-      try {
-        if (!cap.__saNativeExport && cap.registerPlugin) cap.__saNativeExport = cap.registerPlugin('NativeExport');
-        const NativeExport = cap.__saNativeExport;
-        if (!NativeExport || typeof NativeExport.saveFile !== 'function') throw new Error('native_export_unavailable');
-        const base64 = await dataToBase64(data);
-        const result = await NativeExport.saveFile({ filename, data: base64, mimeType: mimeForFilename(filename) });
-        if (result && result.uri) {
-          alert('Arquivo salvo em Downloads/Solut_Arquive.');
-          return true;
-        }
-        throw new Error('native_export_no_uri');
-      } catch (nativeError) {
-        console.error('Solut_Arquive: exportação nativa falhou', nativeError);
-        // Continua para o fallback abaixo.
-      }
-    }
-
-    try {
-      if (backend.downloads && backend.downloads.save) {
-        await backend.downloads.save({ filename, data });
-        return true;
-      }
-
-      const blob = data instanceof Blob ? data : new Blob([data], { type: mimeForFilename(filename) });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = filename; a.style.display = 'none';
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1500);
-      return true;
-    } catch (e) {
-      console.error('Solut_Arquive: exportação falhou', e);
-      if (!e || e.code !== 'declined') alert('Não foi possível salvar o arquivo agora. Tente novamente em instantes.');
-      return false;
-    }
+    if (!backend.downloads) { alert('Salvar arquivos não está disponível neste momento.'); return; }
+    try { await backend.downloads.save({ filename, data }); }
+    catch (e) { if (!e || e.code !== 'declined') alert('Não foi possível salvar o arquivo agora. Tente novamente em instantes.'); }
   }
 
   /* ============================================================
@@ -1008,21 +858,88 @@
     applyThemeIcon();
   });
 
-  function switchTab(mod) {
+  /* Mobile sidebar drawer — works only in portrait/mobile layouts. */
+  const mobileDrawer = $('#mobileDrawer');
+  const mobileDrawerBackdrop = $('#mobileDrawerBackdrop');
+  const mobileMenuBtn = $('#mobileMenuBtn');
+  const mobileDrawerClose = $('#mobileDrawerClose');
+  const mobileDrawerContent = $('#mobileDrawerContent');
+  const mobileDrawerTitle = $('#mobileDrawerTitle');
+  let mobileDrawerTarget = null;
+
+  function getMobileSidebarTarget() {
+    const active = $('.module.active');
+    if (!active) return null;
+    return active.querySelector('.rail, .slide-strip');
+  }
+
+  function openMobileDrawer() {
+    if (!window.matchMedia('(max-width: 760px)').matches) return;
+    const target = getMobileSidebarTarget();
+    if (!target) return;
+    if (mobileDrawerTarget && mobileDrawerTarget !== target) mobileDrawerTarget.__mobileDrawerPlaceholder?.remove();
+    mobileDrawerTarget = target;
+    const title = target.classList.contains('slide-strip') ? 'SEUS SLIDES' : (target.querySelector('.rail-title')?.textContent || 'MENU');
+    mobileDrawerTitle.textContent = title;
+    const placeholder = document.createElement('div');
+    placeholder.style.display = 'none';
+    target.__mobileDrawerPlaceholder = placeholder;
+    target.parentNode.insertBefore(placeholder, target);
+    mobileDrawerContent.appendChild(target);
+    mobileDrawer.classList.add('open');
+    mobileDrawerBackdrop.classList.add('open');
+    mobileDrawer.setAttribute('aria-hidden','false');
+    mobileDrawerBackdrop.setAttribute('aria-hidden','false');
+    mobileMenuBtn.setAttribute('aria-expanded','true');
+    document.body.classList.add('mobile-drawer-open');
+  }
+
+  function closeMobileDrawer() {
+    if (!mobileDrawerTarget) return;
+    const target = mobileDrawerTarget;
+    const placeholder = target.__mobileDrawerPlaceholder;
+    if (placeholder && placeholder.parentNode) placeholder.parentNode.insertBefore(target, placeholder);
+    if (placeholder) placeholder.remove();
+    delete target.__mobileDrawerPlaceholder;
+    mobileDrawerTarget = null;
+    mobileDrawer.classList.remove('open');
+    mobileDrawerBackdrop.classList.remove('open');
+    mobileDrawer.setAttribute('aria-hidden','true');
+    mobileDrawerBackdrop.setAttribute('aria-hidden','true');
+    mobileMenuBtn.setAttribute('aria-expanded','false');
+    document.body.classList.remove('mobile-drawer-open');
+  }
+
+  mobileMenuBtn.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    mobileDrawer.classList.contains('open') ? closeMobileDrawer() : openMobileDrawer();
+  });
+  mobileDrawerClose.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
     closeMobileDrawer();
+  });
+  mobileDrawer.addEventListener('click', e => e.stopPropagation());
+  mobileDrawerBackdrop.addEventListener('click', e => {
+    if (e.target === mobileDrawerBackdrop) closeMobileDrawer();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && mobileDrawer.classList.contains('open')) closeMobileDrawer();
+  });
+  window.addEventListener('resize', () => {
+    if (!window.matchMedia('(max-width: 760px)').matches) closeMobileDrawer();
+  });
+
+  function switchTab(mod) {
     $$('.tab').forEach(t => t.classList.remove('active'));
     $$('.module').forEach(m => m.classList.remove('active'));
     $('.tab[data-mod="' + mod + '"]').classList.add('active');
     $('#mod-' + mod).classList.add('active');
+    if (mobileDrawer.classList.contains('open')) closeMobileDrawer();
     if (mod === 'calendar' && typeof window.__saCheckCalendarReminders === 'function') window.__saCheckCalendarReminders();
   }
   $$('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.mod)));
-  $('#mobileMenuBtn').addEventListener('click', () => {
-    if (mobileDrawerTarget) closeMobileDrawer(); else openMobileDrawer();
-  });
-  $('#mobileDrawerBackdrop').addEventListener('click', ev => { if (ev.target === ev.currentTarget) closeMobileDrawer(); });
-  $('#mobileDrawerBackdrop').addEventListener('touchend', ev => { if (ev.target === ev.currentTarget) closeMobileDrawer(); }, { passive: true });
-  window.addEventListener('resize', () => { if (window.innerWidth > 760) closeMobileDrawer(); });
 
   /* ============================================================
      Documentos
@@ -1268,19 +1185,6 @@
         save(); renderSheetTabs(); renderTable();
       });
       bar.appendChild(add);
-      const del = document.createElement('button');
-      del.className = 'icon-btn sm danger'; del.title = 'Excluir planilha'; del.setAttribute('aria-label', 'Excluir planilha');
-      del.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 7h16M10 11v6M14 11v6M9 7l1-2h4l1 2M6 7l1 14h10l1-14"/></svg>';
-      del.addEventListener('click', () => {
-        if (sheets.order.length <= 1) { alert('É necessário manter pelo menos uma planilha.'); return; }
-        if (!confirm('Excluir a planilha "' + sheets.active + '"?')) return;
-        const name = sheets.active;
-        sheets.order = sheets.order.filter(n => n !== name);
-        delete sheets.data[name]; delete sheets.styles[name];
-        sheets.active = sheets.order[0];
-        save(); renderSheetTabs(); renderTable();
-      });
-      bar.appendChild(del);
     }
 
     $('#exportSheetBtn').addEventListener('click', async () => {
@@ -1460,15 +1364,10 @@
 
       cells.forEach(c => {
         const el = document.createElement('div');
+        el.className = 'cal-day' + (c.muted ? ' muted' : '') + (sameDay(c.date, today) ? ' today' : '');
         const k = keyFor(c.date);
-        const dayEvents = events[k] || [];
-        el.className = 'cal-day' + (c.muted ? ' muted' : '') + (sameDay(c.date, today) ? ' today' : '') + (dayEvents.length ? ' has-event' : '');
-        if (dayEvents.length) {
-          const hue = (Math.abs(c.date.getFullYear() * 17 + (c.date.getMonth() + 1) * 31 + c.date.getDate() * 13) % 360);
-          el.style.setProperty('--event-hue', hue);
-        }
         let html = '<div class="dnum">' + c.day + '</div>';
-        dayEvents.forEach(ev => {
+        (events[k] || []).forEach(ev => {
           const remind = typeof ev === 'object' && ev.remind;
           html += '<div class="cal-evt">' + (remind ? '\uD83D\uDD14 ' : '') + escapeHtml(titleOf(ev)) + '</div>';
         });
@@ -1579,9 +1478,7 @@
   ============================================================ */
   function initFiles() {
     let files = LS.get('sa:files', []);
-    let trash = LS.get('sa:trash', []);
-    function save() { LS.set('sa:files', files); scheduleBackendSave(); }
-    function saveTrash() { LS.set('sa:trash', trash); scheduleBackendSave(); }
+    function save() { LS.set('sa:files', files); }
     function fmtSize(bytes) {
       if (bytes < 1024) return bytes + ' B';
       if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
@@ -1589,65 +1486,40 @@
     }
     function ext(name) { const parts = name.split('.'); return parts.length > 1 ? parts.pop().toUpperCase().slice(0, 4) : '—'; }
 
-    function renderTrash() {
-      const panel = $('#trashPanel');
-      if (!trash.length) {
-        panel.innerHTML = '<div class="trash-head"><strong>Lixeira</strong><span style="margin-left:auto;color:var(--ink-faint);font-size:12px">vazia</span></div>';
-        return;
-      }
-      panel.innerHTML = '<div class="trash-head"><strong>Lixeira</strong><button class="icon-btn sm danger" id="emptyTrashBtn" title="Esvaziar lixeira" aria-label="Esvaziar lixeira" style="margin-left:auto">×</button></div>';
-      trash.forEach((f, i) => {
-        const row = document.createElement('div'); row.className = 'trash-item';
-        row.innerHTML = '<div class="name"></div><button class="icon-btn sm" title="Restaurar">↶</button><button class="icon-btn sm danger" title="Excluir permanentemente">×</button>';
-        row.querySelector('.name').textContent = f.name;
-        row.querySelectorAll('button')[0].addEventListener('click', () => {
-          const restored = Object.assign({}, f); delete restored.deletedAt;
-          files.unshift(restored); trash.splice(i, 1); save(); saveTrash(); render(); renderTrash();
-        });
-        row.querySelectorAll('button')[1].addEventListener('click', () => {
-          if (!confirm('Excluir "' + f.name + '" permanentemente?')) return;
-          trash.splice(i, 1); saveTrash(); renderTrash();
-        });
-        panel.appendChild(row);
-      });
-      $('#emptyTrashBtn').addEventListener('click', () => {
-        if (!confirm('Esvaziar a lixeira permanentemente?')) return;
-        trash = []; saveTrash(); renderTrash();
-      });
-    }
-
     function render() {
       const list = $('#filesList');
       if (!files.length) {
-        list.innerHTML = '<div class="empty"><div class="icon">◇</div><h3>Nenhum arquivo ainda</h3><p>Envie arquivos para deixá-los à mão neste espaço de trabalho.</p></div>';
+        list.innerHTML = '<div class="empty"><div class="icon">\u25C7</div><h3>Nenhum arquivo ainda</h3><p>Envie arquivos para deixá-los à mão neste espaço de trabalho.</p></div>';
         return;
       }
       list.innerHTML = '';
       files.forEach((f, i) => {
-        const row = document.createElement('div'); row.className = 'file-row';
-        row.innerHTML = '<div class="ficon">' + ext(f.name) + '</div><div class="fname"></div><div class="fmeta"><span>' + fmtSize(f.size || 0) + '</span><span>' + f.date + '</span></div>';
+        const row = document.createElement('div');
+        row.className = 'file-row';
+        row.innerHTML = '<div class="ficon">' + ext(f.name) + '</div><div class="fname"></div>'
+          + '<div class="fmeta"><span>' + fmtSize(f.size || 0) + '</span><span>' + f.date + '</span></div>';
         row.querySelector('.fname').textContent = f.name;
+
         const delBtn = document.createElement('button');
-        delBtn.className = 'icon-btn sm danger'; delBtn.title = 'Mover para lixeira'; delBtn.setAttribute('aria-label', 'Mover arquivo para lixeira');
+        delBtn.className = 'icon-btn sm danger'; delBtn.title = 'Remover'; delBtn.setAttribute('aria-label', 'Remover arquivo');
         delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>';
-        delBtn.addEventListener('click', () => {
-          const removed = files.splice(i, 1)[0];
-          if (removed) { removed.deletedAt = new Date().toISOString(); trash.unshift(removed); }
-          save(); saveTrash(); render(); renderTrash();
-        });
-        row.querySelector('.fmeta').appendChild(delBtn); list.appendChild(row);
+        delBtn.addEventListener('click', () => { files.splice(i, 1); save(); render(); });
+        row.querySelector('.fmeta').appendChild(delBtn);
+
+        list.appendChild(row);
       });
     }
 
-    $('#trashBtn').addEventListener('click', () => $('#trashPanel').classList.toggle('open'));
     $('#fileInput').addEventListener('change', e => {
       Array.from(e.target.files).forEach(file => {
         files.unshift({ name: file.name, size: file.size, date: new Date().toLocaleDateString('pt-BR') });
         incrementUsage();
       });
-      e.target.value = ''; save(); render();
+      e.target.value = '';
+      save(); render();
     });
-    render(); renderTrash();
+
+    render();
   }
 
   $('#search').addEventListener('keydown', e => {
@@ -1662,7 +1534,6 @@
   (async function boot() {
     await initBackend();
     initDocs(); initSheets(); initSlides(); initCalendar(); initFiles();
-    bindFileMentions();
     const splash = $('#splash');
     setTimeout(() => {
       splash.classList.add('hidden');
