@@ -110,6 +110,17 @@
   .rail { width: 230px; flex-shrink: 0; border-right: 1px solid var(--line); background: var(--paper-2); display: flex; flex-direction: column; padding: 14px; gap: 4px; overflow-y: auto; }
   .rail-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
   .rail-title { font-size: 11px; letter-spacing: .2px; color: var(--ink-faint); font-weight: 600; }
+  .mobile-menu-btn { display:none; }
+  .mobile-drawer-backdrop { display:none; position:fixed; inset:0; background:rgba(20,23,15,.28); z-index:119; }
+  .mobile-drawer-backdrop.open { display:block; animation: splashFade .14s ease both; }
+  .mention-popover { position:fixed; z-index:400; width:min(320px, calc(100vw - 24px)); max-height:280px; overflow:auto; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-m); box-shadow:var(--shadow-page); padding:6px; }
+  .mention-popover[hidden] { display:none; }
+  .mention-head { padding:7px 9px 6px; font-size:11px; color:var(--ink-faint); border-bottom:1px solid var(--line); }
+  .mention-item { width:100%; display:flex; align-items:center; gap:8px; border:0; background:none; color:var(--ink); padding:8px 9px; border-radius:var(--radius-s); text-align:left; font-size:13px; }
+  .mention-item:hover, .mention-item:focus { background:var(--paper-2); outline:none; }
+  .mention-item .mi-icon { width:25px; height:25px; border-radius:var(--radius-s); display:flex; align-items:center; justify-content:center; background:var(--accent-soft); color:var(--accent); font:700 9px var(--font-mono); flex-shrink:0; }
+  .mention-item .mi-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .file-mention { color:var(--accent); background:var(--accent-soft); border-radius:3px; padding:1px 3px; white-space:nowrap; }
 
   /* Docs */
   #mod-docs .doc-body { flex: 1; display: flex; flex-direction: column; min-width: 0; }
@@ -228,17 +239,23 @@
   /* Image editor overlay */
 
   @media (max-width: 760px) {
-    .omnibox { max-width: 150px; }
-    .rail, #mod-slides .slide-strip { width: 74px; }
-    .rail .side-btn span.label { display: none; }
-    .doc-page { padding: 34px 22px; }
-    .slide-canvas { padding: 28px; flex-direction: column; }
-    .slide-image-wrap { flex: 0 0 auto; max-height: 30%; }
-    .slide-title-edit { font-size: 22px; }
-    .cal-grid { grid-auto-rows: minmax(64px, 1fr); }
-    .cal-evt { display: none; }
-    .tb-select { max-width: 64px; }
-    .present-slide { flex-direction: column; }
+    .topbar { padding-left: 12px; padding-right: 12px; gap: 8px; }
+    .mobile-menu-btn { display:flex; }
+    .brand { gap:6px; }
+    .brand .mark { font-size:16px; }
+    .omnibox { max-width:none; min-width:0; padding:7px 9px; }
+    .rail, #mod-slides .slide-strip { width:min(292px, 82vw); position:fixed; left:0; top:0; bottom:0; z-index:120; transform:translateX(-105%); box-shadow:none; transition:transform .2s ease, box-shadow .2s ease; }
+    .rail.mobile-open, #mod-slides .slide-strip.mobile-open { transform:translateX(0); box-shadow:8px 0 28px rgba(0,0,0,.18); }
+    .rail .side-btn span.label { display:block; }
+    .doc-page { padding:34px 22px; }
+    .slide-canvas { padding:28px; flex-direction:column; }
+    .slide-image-wrap { flex:0 0 auto; max-height:30%; }
+    .slide-title-edit { font-size:22px; }
+    .cal-grid { grid-auto-rows:minmax(64px, 1fr); }
+    .cal-evt { display:none; }
+    .tb-select { max-width:64px; }
+    .present-slide { flex-direction:column; }
+    .mention-popover { max-height:240px; }
   }
 </style>
 </head>
@@ -253,6 +270,9 @@
 <div id="app">
 
   <header class="topbar">
+    <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" title="Abrir menu lateral" aria-label="Abrir menu lateral" aria-expanded="false">
+      <svg id="mobileMenuIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
     <div class="brand">
       <span class="mark">Solut_Arquive</span>
     </div>
@@ -274,6 +294,9 @@
     <button class="tab" data-mod="calendar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Agenda</button>
     <button class="tab" data-mod="files"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Arquivos</button>
   </nav>
+
+  <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop"></div>
+  <div class="mention-popover" id="fileMentionPopover" hidden></div>
 
   <main class="canvas">
 
@@ -477,6 +500,155 @@
     return (s || 'arquivo').trim().toLowerCase().replace(/[^\w\-]+/g, '_').replace(/_+/g, '_').slice(0, 60) || 'arquivo';
   }
 
+  let mobileDrawerTarget = null;
+
+  function getStoredFiles() {
+    return LS.get('sa:files', []);
+  }
+
+  function fileExt(name) {
+    const p = String(name || '').split('.');
+    return p.length > 1 ? p.pop().toUpperCase().slice(0, 4) : 'ARQ';
+  }
+
+  function closeMobileDrawer() {
+    if (mobileDrawerTarget) mobileDrawerTarget.classList.remove('mobile-open');
+    mobileDrawerTarget = null;
+    const backdrop = $('#mobileDrawerBackdrop');
+    if (backdrop) backdrop.classList.remove('open');
+    const btn = $('#mobileMenuBtn');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+
+  function openMobileDrawer() {
+    closeMobileDrawer();
+    const active = $('.module.active');
+    if (!active) return;
+    const target = active.id === 'mod-docs' ? $('#docsRail') : (active.id === 'mod-slides' ? $('#slideStrip') : null);
+    if (!target) return;
+    mobileDrawerTarget = target;
+    target.classList.add('mobile-open');
+    $('#mobileDrawerBackdrop').classList.add('open');
+    $('#mobileMenuBtn').setAttribute('aria-expanded', 'true');
+  }
+
+  function positionMentionPopover(target) {
+    const pop = $('#fileMentionPopover');
+    if (!pop) return;
+    const r = target.getBoundingClientRect ? target.getBoundingClientRect() : { left: 12, bottom: 60 };
+    pop.style.left = Math.min(Math.max(12, r.left), Math.max(12, window.innerWidth - 332)) + 'px';
+    pop.style.top = Math.min(r.bottom + 6, window.innerHeight - 292) + 'px';
+  }
+
+  function hideFileMentionPopover() {
+    const pop = $('#fileMentionPopover');
+    if (pop) pop.hidden = true;
+  }
+
+  function insertMentionText(target, name) {
+    const token = '@' + name;
+    if (target.isContentEditable) {
+      const sel = window.getSelection();
+      if (!sel || !sel.rangeCount) return;
+      const range = sel.getRangeAt(0);
+      let node = range.startContainer;
+      let offset = range.startOffset;
+      if (node.nodeType !== Node.TEXT_NODE) {
+        const text = document.createTextNode('');
+        range.insertNode(text); node = text; offset = 0;
+      }
+      const value = node.textContent || '';
+      const before = value.slice(0, offset);
+      const at = before.lastIndexOf('@');
+      if (at < 0) return;
+      const start = document.createRange();
+      start.setStart(node, at); start.setEnd(node, offset);
+      start.deleteContents();
+      const span = document.createElement('span');
+      span.className = 'file-mention'; span.dataset.fileName = name; span.textContent = token;
+      start.insertNode(span);
+      const tail = document.createTextNode(' ');
+      span.after(tail);
+      const caret = document.createRange(); caret.setStart(tail, 1); caret.collapse(true);
+      sel.removeAllRanges(); sel.addRange(caret);
+      target.dispatchEvent(new Event('input', { bubbles:true }));
+    } else if (typeof target.selectionStart === 'number') {
+      const start = target.selectionStart, end = target.selectionEnd;
+      const value = target.value || '';
+      const before = value.slice(0, start);
+      const at = before.lastIndexOf('@');
+      if (at < 0) return;
+      target.value = value.slice(0, at) + token + ' ' + value.slice(end);
+      const caret = at + token.length + 1;
+      target.setSelectionRange(caret, caret);
+      target.dispatchEvent(new Event('input', { bubbles:true }));
+    }
+    hideFileMentionPopover();
+  }
+
+  function renderFileMentionPopover(target, query) {
+    const pop = $('#fileMentionPopover');
+    if (!pop) return;
+    const files = getStoredFiles();
+    const q = String(query || '').toLowerCase();
+    const matches = files.filter(f => String(f.name || '').toLowerCase().includes(q)).slice(0, 30);
+    pop.innerHTML = '<div class="mention-head">Arquivos · ' + (q ? 'filtrando por @' + escapeHtml(q) : 'digite o nome após @') + '</div>';
+    if (!matches.length) {
+      pop.innerHTML += '<div style="padding:12px 9px;color:var(--ink-faint);font-size:12px">Nenhum arquivo encontrado.</div>';
+    } else {
+      matches.forEach(f => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'mention-item';
+        b.innerHTML = '<span class="mi-icon">' + escapeHtml(fileExt(f.name)) + '</span><span class="mi-name"></span>';
+        b.querySelector('.mi-name').textContent = f.name;
+        b.addEventListener('mousedown', e => e.preventDefault());
+        b.addEventListener('click', () => insertMentionText(target, f.name));
+        pop.appendChild(b);
+      });
+    }
+    pop.hidden = false;
+    positionMentionPopover(target);
+  }
+
+  function mentionContext(target) {
+    let value = '';
+    let pos = 0;
+    if (target.isContentEditable) {
+      const sel = window.getSelection();
+      if (!sel || !sel.rangeCount || !target.contains(sel.anchorNode)) return null;
+      const range = sel.getRangeAt(0).cloneRange();
+      range.selectNodeContents(target); range.setEnd(sel.anchorNode, sel.anchorOffset);
+      value = range.toString(); pos = value.length;
+    } else if (typeof target.selectionStart === 'number') {
+      value = target.value || ''; pos = target.selectionStart;
+    } else return null;
+    const before = value.slice(0, pos);
+    const at = before.lastIndexOf('@');
+    if (at < 0 || /\s/.test(before.slice(at + 1))) return null;
+    return before.slice(at + 1);
+  }
+
+  function bindFileMentions() {
+    const selector = 'input[type="text"], textarea, [contenteditable="true"]';
+    document.addEventListener('input', e => {
+      const target = e.target; if (!target.matches || !target.matches(selector)) return;
+      const q = mentionContext(target);
+      if (q !== null) renderFileMentionPopover(target, q); else hideFileMentionPopover();
+    });
+    document.addEventListener('keyup', e => {
+      const target = e.target; if (!target.matches || !target.matches(selector)) return;
+      const q = mentionContext(target);
+      if (q !== null) renderFileMentionPopover(target, q); else hideFileMentionPopover();
+    });
+    document.addEventListener('focusin', e => {
+      const target = e.target; if (!target.matches || !target.matches(selector)) return;
+      const q = mentionContext(target); if (q !== null) renderFileMentionPopover(target, q);
+    });
+    document.addEventListener('click', e => {
+      const pop = $('#fileMentionPopover');
+      if (pop && !pop.contains(e.target) && !(e.target.matches && e.target.matches(selector))) hideFileMentionPopover();
+    });
+  }
+
   const scriptCache = {};
   function loadScript(src) {
     if (scriptCache[src]) return scriptCache[src];
@@ -565,13 +737,40 @@
     }
   }
 
+  function mimeForFilename(filename) {
+    const ext = String(filename).split('.').pop().toLowerCase();
+    return ({ docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document', xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation', pdf:'application/pdf', csv:'text/csv', txt:'text/plain' })[ext] || 'application/octet-stream';
+  }
+
+  async function dataToBase64(data) {
+    if (typeof data === 'string') return btoa(unescape(encodeURIComponent(data)));
+    const blob = data instanceof Blob ? data : new Blob([data]);
+    const buf = await blob.arrayBuffer();
+    const bytes = new Uint8Array(buf);
+    let binary = '';
+    const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk) binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+    return btoa(binary);
+  }
+
   async function exportFile(filename, data) {
     try {
       if (backend.downloads && backend.downloads.save) {
         await backend.downloads.save({ filename, data });
         return;
       }
-      const blob = data instanceof Blob ? data : new Blob([data], { type: 'application/octet-stream' });
+      const cap = window.Capacitor;
+      if (cap && cap.getPlatform && cap.getPlatform() === 'android') {
+        const NativeExport = cap.__saNativeExport || (cap.registerPlugin ? (cap.__saNativeExport = cap.registerPlugin('NativeExport')) : null);
+        if (!NativeExport) throw new Error('native_export_unavailable');
+        const base64 = await dataToBase64(data);
+        const result = await NativeExport.saveFile({ filename, data: base64, mimeType: mimeForFilename(filename) });
+        if (result && result.uri) {
+          alert('Arquivo salvo em Downloads/Solut_Arquive.');
+          return;
+        }
+      }
+      const blob = data instanceof Blob ? data : new Blob([data], { type: mimeForFilename(filename) });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url; a.download = filename; a.style.display = 'none';
@@ -794,6 +993,7 @@
   });
 
   function switchTab(mod) {
+    closeMobileDrawer();
     $$('.tab').forEach(t => t.classList.remove('active'));
     $$('.module').forEach(m => m.classList.remove('active'));
     $('.tab[data-mod="' + mod + '"]').classList.add('active');
@@ -801,6 +1001,11 @@
     if (mod === 'calendar' && typeof window.__saCheckCalendarReminders === 'function') window.__saCheckCalendarReminders();
   }
   $$('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.mod)));
+  $('#mobileMenuBtn').addEventListener('click', () => {
+    if (mobileDrawerTarget) closeMobileDrawer(); else openMobileDrawer();
+  });
+  $('#mobileDrawerBackdrop').addEventListener('click', closeMobileDrawer);
+  window.addEventListener('resize', () => { if (window.innerWidth > 760) closeMobileDrawer(); });
 
   /* ============================================================
      Documentos
@@ -1440,6 +1645,7 @@
   (async function boot() {
     await initBackend();
     initDocs(); initSheets(); initSlides(); initCalendar(); initFiles();
+    bindFileMentions();
     const splash = $('#splash');
     setTimeout(() => {
       splash.classList.add('hidden');
